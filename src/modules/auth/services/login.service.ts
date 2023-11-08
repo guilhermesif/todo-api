@@ -2,10 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { FindOneUserRepository } from '../repositories';
 import { LoginDto } from '../dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class LoginService {
-  constructor(private readonly findOneUserRepository: FindOneUserRepository) {}
+  constructor(
+    private readonly findOneUserRepository: FindOneUserRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async handle(dto: LoginDto) {
     const user = await this.findOneUserRepository.handle({
@@ -20,6 +24,11 @@ export class LoginService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return user;
+    const accessToken = await this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+    });
+
+    return { accessToken };
   }
 }
