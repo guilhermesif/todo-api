@@ -4,6 +4,7 @@ import {
   FindOneUserRepository,
 } from '../repositories';
 import { CreateOneUserDto } from '../dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CreateOneUserService {
@@ -19,11 +20,13 @@ export class CreateOneUserService {
 
     if (user) throw new ConflictException(`Email ${dto.email} already exists`);
 
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
     return await this.createOneUserRepository.handle({
       data: {
         name: dto.name,
         email: dto.email,
-        password: dto.password,
+        password: hashedPassword,
       },
     });
   }
