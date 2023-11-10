@@ -7,7 +7,9 @@ export class FindManyTasksService {
     private readonly findManyTasksRepository: FindManyTasksRepository,
   ) {}
 
-  async handle() {
-    return await this.findManyTasksRepository.handle({});
+  async handle(userPayload: Express.Request['user']) {
+    return await this.findManyTasksRepository.handle({
+      where: { userId: userPayload.sub },
+    });
   }
 }
