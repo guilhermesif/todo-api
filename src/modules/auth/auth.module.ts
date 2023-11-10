@@ -9,10 +9,11 @@ import { JwtGuard } from './guards';
   imports: [
     JwtModule.register({
       secret: 'secret',
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: 300 },
     }),
   ],
   controllers: [LoginController],
   providers: [LoginService, FindOneUserRepository, JwtGuard],
+  exports: [JwtModule],
 })
 export class AuthModule {}
