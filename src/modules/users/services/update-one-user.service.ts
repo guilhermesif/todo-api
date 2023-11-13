@@ -19,7 +19,7 @@ export class UpdateOneUserService {
 
     if (!user) throw new NotFoundException(`User ${params.id} not found`);
 
-    return await this.updateOneUserRepository.handle({
+    const updatedUser = await this.updateOneUserRepository.handle({
       where: { id: params.id },
       data: {
         name: dto.name,
@@ -27,5 +27,9 @@ export class UpdateOneUserService {
         password: dto.password,
       },
     });
+
+    delete updatedUser.password;
+
+    return updatedUser;
   }
 }

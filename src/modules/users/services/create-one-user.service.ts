@@ -22,12 +22,16 @@ export class CreateOneUserService {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-    return await this.createOneUserRepository.handle({
+    const createdUser = await this.createOneUserRepository.handle({
       data: {
         name: dto.name,
         email: dto.email,
         password: hashedPassword,
       },
     });
+
+    delete createdUser.password;
+
+    return createdUser;
   }
 }

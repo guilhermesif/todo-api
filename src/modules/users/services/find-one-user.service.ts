@@ -12,6 +12,8 @@ export class FindOneUserService {
 
     if (!user) throw new NotFoundException(`User ${id} not found`);
 
+    delete user.password;
+
     return user;
   }
 }

@@ -8,6 +8,11 @@ export class FindManyUsersService {
   ) {}
 
   async handle() {
-    return await this.findManyUsersRepository.handle({});
+    const users = await this.findManyUsersRepository.handle({});
+
+    return users.map((user) => {
+      delete user.password;
+      return user;
+    });
   }
 }
